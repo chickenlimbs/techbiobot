@@ -1,0 +1,517 @@
+<!doctype html>
+<html>
+    <head>
+
+        <!-- THIS IS THE STYLE STUFF; CSS goes here -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+      <style>
+          html {
+              background: #00acee;
+             
+          }
+          body {
+              background: #00acee;
+              padding: 32px;
+          }
+          main {
+              background: white;
+              padding: 32px;
+              margin: 0 auto;
+              border-radius: 16px;
+              min-height: 200px;
+              max-width: 800px;
+              display: flex;
+              flex-flow: column nowrap;
+          }
+
+          h1 {
+              color: #14171A;
+              font-size: 18pt;
+              line-height: 18pt;
+          }
+          h2 { 
+              color: #697785;
+              font-size: 16px;
+              line-height: 16px;
+          }    
+        
+          p {
+              font-size: 20px;
+          }
+
+          #tweet-preview {
+              flex: 1 0 auto;
+          }
+          #reroll {
+              flex: 2 0 0;
+          }
+          #tweet {
+              flex: 1 0 0;
+          }
+          #tweet-actions{
+              display: flex;
+              flex-flow: row nowrap;
+          }
+          #reroll {
+              margin-right: 12px;
+          }
+          .tag {
+              color: #347CF7;
+          }
+      </style>
+    </head>
+
+    <body> 
+        <!-- THIS IS THE MARKUP STUFF; HTML goes here -->
+        <main>
+            
+        <section id="tweet-preview">
+            <h1>Bio Bot</h1>
+            <h2>@techbiobot</h2>
+            <p id="tweet-content"></p>
+        </section>
+        <section id="tweet-actions">   
+            <button type="button" class="btn btn-outline-primary" id="reroll">Generate new Twitter bio</button>
+            <button type="button" class="btn btn-primary" id="tweet">Tweet it</button>
+        </section>
+        </main>
+        <!-- THIS IS THE LOGIC STUFF; no more HTML past here -->
+        <script>
+
+
+/* 
+Tweet format:
+
+{{techwork}} @{{company}}. 
+{{random-emoji}}. {{denominal_verb}} of {{boring_interest}} {{emoji}} {{emoji}}. 
+{{adjective}} {{programming language}} {{noun}}. 
+Previously @ {{company name}}. {{pronouns}} 
+
+*/
+
+
+let techjobs = 
+
+[
+    "dragging rectangles",
+    "designing interfaces",
+    "hacking shit", 
+    "building something fun",
+    "breaking things",
+    "making the world a better place",
+    "occasional speaker",
+    "doing gods work",
+    "always learning",
+    "coding aggressively",
+    "creating memories",
+    "experience design",
+    "head of fun",
+    "100x engineer",
+    "machine learning",
+    "teaching computers",
+    "visualising quantum particles",
+    "decorating databases",
+    "chief bastard",
+    "scared coder",
+    "introverting",
+    "blockchain wrangling",
+    "i build web stuff",
+    "digital safety and harassment response",
+    "fungineer",
+    "All the things",
+    "Empowering users",
+    "scrum master",
+    "Sr. Accessibility Engineer",
+
+
+
+
+]
+
+let companies = 
+[
+    "Google",
+    "HSBC",
+    "Amazon",
+    "facebook",
+    "monzo",
+    "wonderbly",
+    "starlingbank",
+    "slack",
+    "twitter",
+    "walmart",
+    "uber",
+    "tesla",
+    "myspace",
+    "chickencottage",
+    "sky",
+    "deliveroo",
+    "justeat",
+    "foundersfactory",
+    "samsung",
+    "IBM",
+    "Apple",
+    "Tinder",
+    "okcupid",
+    "skyscanner",
+    "freetrade",
+    "trainline",
+    "RockstarGames",
+    "Microsoft",
+    "barclays",
+    "bloomberg",
+    "shell",
+    "airbnb",
+    "ideo",
+    "gopro",
+    "Cisco",
+    "Dell",
+    "ebay",
+    "23andme",
+    "McAfee",
+    "Nokia",
+    "Youtube",
+    
+
+
+
+
+]
+
+let denominal_verbs =
+[
+    "lover",
+    "mother",
+    "father",
+    "sister",
+    "brother",
+    "wizard",
+    "lord",
+    "advocate",
+    "designer",
+    "maker",
+    "proponent",
+    "master",
+    "creator",
+    "protector",    
+]    
+
+let boring_interests = 
+
+[
+    "avocado",
+    "cats",
+    "dogs",
+    "coffee",
+    "painting",
+    "travel",
+    "justice",
+    "music",
+    "brunch",
+    "sourdough",
+    "hip hop",
+    "planes",
+    "friends",
+    "celebrity",
+    "the environment",
+    "plants",
+    "flat whites",
+    "gentle banter",
+    "pizza",
+    "agile",
+    "soul",
+
+]
+
+let adjectives =
+
+[ 
+    "crazy",
+    "zany",
+    "bashful",
+    "racist",
+    "arrogant",
+    "old-fashioned",
+    "melodic",
+    "bored",
+    "dizzy",
+    "aggressive",
+    "confused",
+    "dull",
+    "agile",
+    "opinionated",
+    "tolerant",
+    "empathetic",
+    "pansexual",
+    "sapiosexual",
+    "struggling",
+    "lazy",
+    "liberal",
+    "progessive",
+    "benevolent",
+    "sympathetic",
+    "motivated",
+    "passionate",
+
+    
+
+]
+
+let nouns =    
+[
+    "mage",
+    "racist",
+    "philistine",
+    "philanthropist",
+    "brainchild",
+    "heathen",
+    "harlot",
+    "pimp",
+    "egg",
+    "factory",
+    "museum",
+    "dad",
+    "bastard",
+    "chicken",
+    "doctor",
+    "horse",
+    "scribe",
+    "pelican",
+    "peacock",
+    "lizard",
+    "composer",
+    "chef",
+    "corpse",
+    "instrument",
+    "weapon",
+    "on the blockchain",
+    "creative",
+    "consultant",
+    "dreamer",
+    "whisperer",
+    "spokesperson",
+
+
+
+
+]
+let programming_languages =
+
+[ 
+    "javascript",
+    "ruby",
+    "ember",
+    "react",
+    "C++",
+    "sketch",
+    "figma",
+    "runescript",
+    "python",
+    "scrum",
+    "horse",
+    "diversity",
+    "inclusion",
+    "empathy",
+    "typescript",
+    "user-centric",
+    "coffeescript",
+    "insights",
+    "pipeline",
+    "kanban",
+
+]
+let titles =
+
+[ 
+    "lead",
+    "consulting",
+    "intern",
+    "manager",
+    "dev",
+    "engineer",
+    "office manager",
+    "CRM",
+    "Accesssiblity engineering",
+
+]
+let pronouns = 
+
+[
+    "he/him",
+    "he/him",
+    "he/him",
+    "he/him",
+    "he/him",
+    "he/him",
+    "he/him",
+    "he/him",
+    "he/him",
+    "he/him",
+    "he/him",
+    "he/him",
+    "she/her",
+    "she/her",
+    "they/them",
+    "she/her",
+    "she/her",
+    "they/them",
+    "she/her",
+    "she/her",
+    "they/them",
+    "thine/thou",
+    "ze/hir",
+    "he/them",
+    "xe/xem"
+    
+]
+
+let random_emojis=
+[
+    "✌",
+    "😂",
+    "😝",
+    "😁",
+    "😱",
+    "👉",
+    "🙌",
+    "🍻",
+    "🔥",
+    "🌈",
+    "☀",
+    "🎈",
+    "🌹",
+    "💄",
+    "🎀",
+    "⚽",
+    "🎾",
+    "🏁",
+    "😡",
+    "👿",
+    "🐻",
+    "🐶",
+    "🐬",
+    "🐟",
+    "🍀",
+    "👀",
+    "🚗",
+    "🍎",
+    "💝",
+    "💙",
+    "👌",
+    "😍",
+    "😉",
+    "😓",
+    "😳",
+    "💪",
+    ".Ideas and projects",
+    "💩",
+    "🍸",
+    "🔑",
+    "💖",
+    "🌟",
+    ".Also spaceships and cyberpunk shanty towns.",
+    "🎉",
+    "🌺",
+    "🎶",
+    "👠",
+    "🏈",
+    "Interests too wide to list here.",
+    "⚾",
+    "🏆",
+    "👽",
+    "💀",
+    "🐵",
+    "🐮",
+    ".I get on a medium amount of planes.",
+    "🐩",
+    "🐎",
+    "💣",
+    "👃",
+    "👂",
+    "🍓",
+    "💘",
+    "💜",
+    "👊",
+    ".words are my own.",
+    "💋",
+    "😘",
+    "😜",
+    ".Virgo.",
+    "😵",
+    "🙏",
+    "👋",
+    ".Words are my own.",
+    "🚽",
+    "💃",
+    "💎",
+    "🚀",
+    "🌙",
+    "🎁",
+    "⛄",
+    "🌊",
+    "⛵",
+    "🎱",
+    "💰",
+    "👶",
+    "👸",
+    "🐰",
+    "🐷",
+    "🐍",
+    "🐫",
+    "🔫",
+    "👄",
+    "🚲",
+    "🍉",
+    "💛",
+    "💚"
+]
+
+function randomArrayElement(array) {
+    let index = Math.floor(Math.random() * array.length);
+    return array[index];
+  }
+
+// This renders the tweet
+function organisedString() {
+
+    var techwork = randomArrayElement(techjobs);
+var company1 = randomArrayElement(companies);
+var company2 = randomArrayElement(companies);
+var denominal_verb = randomArrayElement(denominal_verbs);
+var boring_interest = randomArrayElement(boring_interests);
+var adjective = randomArrayElement(adjectives);
+var noun = randomArrayElement(nouns);
+var programming_language1 = randomArrayElement(programming_languages);
+var programming_language2 = randomArrayElement(programming_languages);
+var mypronouns = randomArrayElement(pronouns);
+var random_emoji1 = randomArrayElement(random_emojis);
+var random_emoji2 = randomArrayElement(random_emojis);
+var random_emoji3 = randomArrayElement(random_emojis);
+var jobtitle = randomArrayElement(titles);
+
+return `${techwork} <span class="tag">@${company1}</span>, ${random_emoji1}, ${denominal_verb} of ${boring_interest} ${random_emoji2}.
+${adjective} ${programming_language1} ${noun}. ${random_emoji3}
+Previously ${programming_language2} ${jobtitle} <span class="tag">@${company2}</span>. ${mypronouns}`
+}
+ 
+const $reroll = document.getElementById('reroll');
+const $tweetContent = document.getElementById('tweet-content');
+
+
+//This is the API stuff
+
+var apiKey = 'fEyk55eQimIzEWStvRr7L1Vu4'
+var apiSecretKey = 'knolLyzf1lmO7Jrsq2TvUVVxU1ASFjKHUE2Ym8dnllHPDl2prz'
+var acessToken = '1197082173574176768-ZYvZVCD9DAVmwlakqfk30d9iaskaDv'
+var accessTokenSecret = 'wYuU2oLMk6NnEO4VQ7FgBpCihHkgIrEcUPmyQMRHthOuv'
+
+// This is what gets tweeted:
+$tweetContent.innerHTML = organisedString() 
+
+$reroll.addEventListener('click', e => {
+$tweetContent.innerHTML = organisedString() 
+})
+
+        </script>
+    </body>
+</html>
