@@ -1,66 +1,517 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <% include ../partials/header.ejs %>
-</head>
+    <head>
 
-<body>
+        <!-- THIS IS THE STYLE STUFF; CSS goes here -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+      <style>
+          html {
+              background: #00acee;
+             
+          }
+          body {
+              background: #00acee;
+              padding: 32px;
+          }
+          main {
+              background: white;
+              padding: 32px;
+              margin: 0 auto;
+              border-radius: 16px;
+              min-height: 200px;
+              max-width: 800px;
+              display: flex;
+              flex-flow: column nowrap;
+          }
 
-  <% include ../partials/nav.ejs %>
+          h1 {
+              color: #14171A;
+              font-size: 18pt;
+              line-height: 18pt;
+          }
+          h2 { 
+              color: #697785;
+              font-size: 16px;
+              line-height: 16px;
+          }    
+        
+          p {
+              font-size: 20px;
+          }
 
-<div class="jumbotron text-center">
-  <div class="container">
-    <a href="/" class="lang-logo">
-      <img src="/lang-logo.png">
-    </a>
-    <h1>Getting Started with Node on Heroku</h1>
-    <p>This is a sample Node application deployed to Heroku. It's a reasonably simple app - but a good foundation for understanding how to get the most out of the Heroku platform.</p>
-    <a type="button" class="btn btn-lg btn-default" href="https://devcenter.heroku.com/articles/getting-started-with-nodejs"><span class="glyphicon glyphicon-flash"></span> Getting Started with Node</a>
-    <a type="button" class="btn btn-lg btn-primary" href="https://github.com/heroku/node-js-getting-started"><span class="glyphicon glyphicon-download"></span> Source on GitHub</a>
-  </div>
-</div>
-<div class="container">
-  <div class="alert alert-info text-center" role="alert">
-    To deploy your own copy, and learn the fundamentals of the Heroku platform, head over to the <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs" class="alert-link">Getting Started with Node on Heroku</a> tutorial.
-  </div>
-  <hr>
-  <div class="row">
-    <div class="col-md-6">
-      <h3><span class="glyphicon glyphicon-info-sign"></span> How this sample app works</h3>
-      <ul>
-        <li>This app was deployed to Heroku, either using Git or by using <a href="https://github.com/heroku/node-js-getting-started">Heroku Button</a> on the repository.</li>
+          #tweet-preview {
+              flex: 1 0 auto;
+          }
+          #reroll {
+              flex: 2 0 0;
+          }
+          #tweet {
+              flex: 1 0 0;
+          }
+          #tweet-actions{
+              display: flex;
+              flex-flow: row nowrap;
+          }
+          #reroll {
+              margin-right: 12px;
+          }
+          .tag {
+              color: #347CF7;
+          }
+      </style>
+    </head>
 
-        <li>When Heroku received the source code, it fetched all the dependencies in the <a href="https://github.com/heroku/node-js-getting-started/blob/master/package.json">package.json</a>, creating a deployable slug.</li>
-        <li>The platform then spins up a dyno, a lightweight container that provides an isolated environment in which the slug can be mounted and executed.</li>
-        <li>You can scale your app, manage it, and deploy over <a href="https://addons.heroku.com/">150 add-on services</a>, from the Dashboard or CLI.</li>
-      </ul>
-    </div>
-    <div class="col-md-6">
-      <h3><span class="glyphicon glyphicon-link"></span> Next Steps</h3>
-      <ul>
-        <li>If you are following the <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs">Getting Started</a> guide, then please head back to the tutorial and follow the next steps!</li>
-        <li>If you deployed this app by deploying the Heroku Button, then in a command line shell, run:</li>
-        <ul>
-          <li><code>git clone https://github.com/heroku/node-js-getting-started.git</code> - this will create a local copy of the source code for the app</li>
-          <li><code>cd node-js-getting-started</code> - change directory into the local source code repository</li>
-          <li><code>heroku git:remote -a &lt;your-app-name></code> - associate the Heroku app with the repository</li>
-          <li>You'll now be set up to run the app locally, or <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs#push-local-changes">deploy changes</a> to Heroku</li>
-        </ul>
-      </ul>
-      <h3><span class="glyphicon glyphicon-link"></span> Helpful Links</h3>
-      <ul>
-        <li><a href="https://www.heroku.com/home">Heroku</a></li>
-        <li><a href="https://devcenter.heroku.com/">Heroku Dev Center</a></li>
-        <li><a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs">Getting Started with Node on Heroku</a></li>
-        <li><a href="https://devcenter.heroku.com/articles/deploying-nodejs">Deploying Node Apps on Heroku</a></li>
-      </ul>
-    </div>
-  </div> <!-- row -->
-   <div class="alert alert-info text-center" role="alert">
-    Please do work through the Getting Started guide, even if you do know how to build such an application.  The guide covers the basics of working with Heroku, and will familiarize you with all the concepts you need in order to build and deploy your own apps.
-  </div>
-</div>
+    <body> 
+        <!-- THIS IS THE MARKUP STUFF; HTML goes here -->
+        <main>
+            
+        <section id="tweet-preview">
+            <h1>Bio Bot</h1>
+            <h2>@techbiobot</h2>
+            <p id="tweet-content"></p>
+        </section>
+        <section id="tweet-actions">   
+            <button type="button" class="btn btn-outline-primary" id="reroll">Generate new Twitter bio</button>
+            <button type="button" class="btn btn-primary" id="tweet">Tweet it</button>
+        </section>
+        </main>
+        <!-- THIS IS THE LOGIC STUFF; no more HTML past here -->
+        <script>
 
 
-</body>
+/* 
+Tweet format:
+
+{{techwork}} @{{company}}. 
+{{random-emoji}}. {{denominal_verb}} of {{boring_interest}} {{emoji}} {{emoji}}. 
+{{adjective}} {{programming language}} {{noun}}. 
+Previously @ {{company name}}. {{pronouns}} 
+
+*/
+
+
+let techjobs = 
+
+[
+    "dragging rectangles",
+    "designing interfaces",
+    "hacking shit", 
+    "building something fun",
+    "breaking things",
+    "making the world a better place",
+    "occasional speaker",
+    "doing gods work",
+    "always learning",
+    "coding aggressively",
+    "creating memories",
+    "experience design",
+    "head of fun",
+    "100x engineer",
+    "machine learning",
+    "teaching computers",
+    "visualising quantum particles",
+    "decorating databases",
+    "chief bastard",
+    "scared coder",
+    "introverting",
+    "blockchain wrangling",
+    "i build web stuff",
+    "digital safety and harassment response",
+    "fungineer",
+    "All the things",
+    "Empowering users",
+    "scrum master",
+    "Sr. Accessibility Engineer",
+
+
+
+
+]
+
+let companies = 
+[
+    "Google",
+    "HSBC",
+    "Amazon",
+    "facebook",
+    "monzo",
+    "wonderbly",
+    "starlingbank",
+    "slack",
+    "twitter",
+    "walmart",
+    "uber",
+    "tesla",
+    "myspace",
+    "chickencottage",
+    "sky",
+    "deliveroo",
+    "justeat",
+    "foundersfactory",
+    "samsung",
+    "IBM",
+    "Apple",
+    "Tinder",
+    "okcupid",
+    "skyscanner",
+    "freetrade",
+    "trainline",
+    "RockstarGames",
+    "Microsoft",
+    "barclays",
+    "bloomberg",
+    "shell",
+    "airbnb",
+    "ideo",
+    "gopro",
+    "Cisco",
+    "Dell",
+    "ebay",
+    "23andme",
+    "McAfee",
+    "Nokia",
+    "Youtube",
+    
+
+
+
+
+]
+
+let denominal_verbs =
+[
+    "lover",
+    "mother",
+    "father",
+    "sister",
+    "brother",
+    "wizard",
+    "lord",
+    "advocate",
+    "designer",
+    "maker",
+    "proponent",
+    "master",
+    "creator",
+    "protector",    
+]    
+
+let boring_interests = 
+
+[
+    "avocado",
+    "cats",
+    "dogs",
+    "coffee",
+    "painting",
+    "travel",
+    "justice",
+    "music",
+    "brunch",
+    "sourdough",
+    "hip hop",
+    "planes",
+    "friends",
+    "celebrity",
+    "the environment",
+    "plants",
+    "flat whites",
+    "gentle banter",
+    "pizza",
+    "agile",
+    "soul",
+
+]
+
+let adjectives =
+
+[ 
+    "crazy",
+    "zany",
+    "bashful",
+    "racist",
+    "arrogant",
+    "old-fashioned",
+    "melodic",
+    "bored",
+    "dizzy",
+    "aggressive",
+    "confused",
+    "dull",
+    "agile",
+    "opinionated",
+    "tolerant",
+    "empathetic",
+    "pansexual",
+    "sapiosexual",
+    "struggling",
+    "lazy",
+    "liberal",
+    "progessive",
+    "benevolent",
+    "sympathetic",
+    "motivated",
+    "passionate",
+
+    
+
+]
+
+let nouns =    
+[
+    "mage",
+    "racist",
+    "philistine",
+    "philanthropist",
+    "brainchild",
+    "heathen",
+    "harlot",
+    "pimp",
+    "egg",
+    "factory",
+    "museum",
+    "dad",
+    "bastard",
+    "chicken",
+    "doctor",
+    "horse",
+    "scribe",
+    "pelican",
+    "peacock",
+    "lizard",
+    "composer",
+    "chef",
+    "corpse",
+    "instrument",
+    "weapon",
+    "on the blockchain",
+    "creative",
+    "consultant",
+    "dreamer",
+    "whisperer",
+    "spokesperson",
+
+
+
+
+]
+let programming_languages =
+
+[ 
+    "javascript",
+    "ruby",
+    "ember",
+    "react",
+    "C++",
+    "sketch",
+    "figma",
+    "runescript",
+    "python",
+    "scrum",
+    "horse",
+    "diversity",
+    "inclusion",
+    "empathy",
+    "typescript",
+    "user-centric",
+    "coffeescript",
+    "insights",
+    "pipeline",
+    "kanban",
+
+]
+let titles =
+
+[ 
+    "lead",
+    "consulting",
+    "intern",
+    "manager",
+    "dev",
+    "engineer",
+    "office manager",
+    "CRM",
+    "Accesssiblity engineering",
+
+]
+let pronouns = 
+
+[
+    "he/him",
+    "he/him",
+    "he/him",
+    "he/him",
+    "he/him",
+    "he/him",
+    "he/him",
+    "he/him",
+    "he/him",
+    "he/him",
+    "he/him",
+    "he/him",
+    "she/her",
+    "she/her",
+    "they/them",
+    "she/her",
+    "she/her",
+    "they/them",
+    "she/her",
+    "she/her",
+    "they/them",
+    "thine/thou",
+    "ze/hir",
+    "he/them",
+    "xe/xem"
+    
+]
+
+let random_emojis=
+[
+    "✌",
+    "😂",
+    "😝",
+    "😁",
+    "😱",
+    "👉",
+    "🙌",
+    "🍻",
+    "🔥",
+    "🌈",
+    "☀",
+    "🎈",
+    "🌹",
+    "💄",
+    "🎀",
+    "⚽",
+    "🎾",
+    "🏁",
+    "😡",
+    "👿",
+    "🐻",
+    "🐶",
+    "🐬",
+    "🐟",
+    "🍀",
+    "👀",
+    "🚗",
+    "🍎",
+    "💝",
+    "💙",
+    "👌",
+    "😍",
+    "😉",
+    "😓",
+    "😳",
+    "💪",
+    ".Ideas and projects",
+    "💩",
+    "🍸",
+    "🔑",
+    "💖",
+    "🌟",
+    ".Also spaceships and cyberpunk shanty towns.",
+    "🎉",
+    "🌺",
+    "🎶",
+    "👠",
+    "🏈",
+    "Interests too wide to list here.",
+    "⚾",
+    "🏆",
+    "👽",
+    "💀",
+    "🐵",
+    "🐮",
+    ".I get on a medium amount of planes.",
+    "🐩",
+    "🐎",
+    "💣",
+    "👃",
+    "👂",
+    "🍓",
+    "💘",
+    "💜",
+    "👊",
+    ".words are my own.",
+    "💋",
+    "😘",
+    "😜",
+    ".Virgo.",
+    "😵",
+    "🙏",
+    "👋",
+    ".Words are my own.",
+    "🚽",
+    "💃",
+    "💎",
+    "🚀",
+    "🌙",
+    "🎁",
+    "⛄",
+    "🌊",
+    "⛵",
+    "🎱",
+    "💰",
+    "👶",
+    "👸",
+    "🐰",
+    "🐷",
+    "🐍",
+    "🐫",
+    "🔫",
+    "👄",
+    "🚲",
+    "🍉",
+    "💛",
+    "💚"
+]
+
+function randomArrayElement(array) {
+    let index = Math.floor(Math.random() * array.length);
+    return array[index];
+  }
+
+// This renders the tweet
+function organisedString() {
+
+    var techwork = randomArrayElement(techjobs);
+var company1 = randomArrayElement(companies);
+var company2 = randomArrayElement(companies);
+var denominal_verb = randomArrayElement(denominal_verbs);
+var boring_interest = randomArrayElement(boring_interests);
+var adjective = randomArrayElement(adjectives);
+var noun = randomArrayElement(nouns);
+var programming_language1 = randomArrayElement(programming_languages);
+var programming_language2 = randomArrayElement(programming_languages);
+var mypronouns = randomArrayElement(pronouns);
+var random_emoji1 = randomArrayElement(random_emojis);
+var random_emoji2 = randomArrayElement(random_emojis);
+var random_emoji3 = randomArrayElement(random_emojis);
+var jobtitle = randomArrayElement(titles);
+
+return `${techwork} <span class="tag">@${company1}</span>, ${random_emoji1}, ${denominal_verb} of ${boring_interest} ${random_emoji2}.
+${adjective} ${programming_language1} ${noun}. ${random_emoji3}
+Previously ${programming_language2} ${jobtitle} <span class="tag">@${company2}</span>. ${mypronouns}`
+}
+ 
+const $reroll = document.getElementById('reroll');
+const $tweetContent = document.getElementById('tweet-content');
+
+
+//This is the API stuff
+
+var apiKey = 'fEyk55eQimIzEWStvRr7L1Vu4'
+var apiSecretKey = 'knolLyzf1lmO7Jrsq2TvUVVxU1ASFjKHUE2Ym8dnllHPDl2prz'
+var acessToken = '1197082173574176768-ZYvZVCD9DAVmwlakqfk30d9iaskaDv'
+var accessTokenSecret = 'wYuU2oLMk6NnEO4VQ7FgBpCihHkgIrEcUPmyQMRHthOuv'
+
+// This is what gets tweeted:
+$tweetContent.innerHTML = organisedString() 
+
+$reroll.addEventListener('click', e => {
+$tweetContent.innerHTML = organisedString() 
+})
+
+        </script>
+    </body>
 </html>
