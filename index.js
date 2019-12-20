@@ -23,6 +23,6 @@ express()
       .catch(function (error) {
         throw error;
       })
-    
+    return true;
   })
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
