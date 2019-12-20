@@ -7,7 +7,7 @@ express()
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
-  .get('/jackstwittwershit', (res, req) => {
+  .get('/biotweet', (req, res) => {
     const T = Twitter({
       consumer_key: 'KVun9c8UmJqTCzHzfZCmbPwKy',
       consumer_secret: 'm5xT4E1wy5JIAozCkETm6s2RuDd3w6i77llk8r9E1VTOzRyvbv',
@@ -15,7 +15,7 @@ express()
       access_token_secret: '8LzOvwz7F9s1nVmA4T9UIs2MEeJVdhoZFOFOqKfdx3n26'
     });
     
-    T.post('statuses/update', {status: 'I Love Twitter'})
+    T.post('statuses/update', {status: req.params.status})
       .then(function (tweet) {
         console.log(tweet);
         return tweet
